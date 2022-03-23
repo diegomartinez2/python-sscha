@@ -96,11 +96,14 @@ subroutine get_v3 ( a, er, transmode, amass, ityp_sc, f, u, rho, log_err, v3, &
 
     do x = 1, n_mode
       ur(:,x) = 0.0d0
+!      !$OMP PARALLEL DO DEFAULT (PRIVATE), SHARED(x),&
+!      !$OMP REDUCTION(+:ur)
       do mu = 1, n_mode
         do y = 1, n_mode
           ur(:,x) = ur(:,x) + u2(:,y)*e(mu,x)*e(mu,y)
         end do
       end do
+!      !$OMP END PARALLEL DO
     end do
 
     ! Calculate the third order coefficients
