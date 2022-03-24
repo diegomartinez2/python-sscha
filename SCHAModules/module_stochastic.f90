@@ -1,7 +1,7 @@
 module stochastic
 
 public :: random_gaussian
-public :: check_gaussian 
+public :: check_gaussian
 public :: average_1D
 public :: average_3D
 public :: standard_deviation_1D
@@ -15,11 +15,11 @@ contains
 !
 ! (1 / 2 pi) * Exp [ -y^2 / 2 ]
 !
-! It has been more or less copied from the book 
+! It has been more or less copied from the book
 ! 'Numerical Recipes in C'
 
 ! function population_idx(pop_out, pop_in_)
-!    implicit none 
+!    implicit none
 !    integer,intent(in) :: pop_out
 !    integer,optional :: pop_in_
 !    character(len=32) :: population_idx
@@ -38,7 +38,7 @@ contains
 !     population_idx="_population"//int_to_char(pop_out)
 !    ELSE
 !     population_idx=''
-!    ENDIF  
+!    ENDIF
 !    RETURN
 ! end function
 
@@ -47,7 +47,7 @@ subroutine random_gaussian(rand)
   double precision, intent(out) :: rand
 
   double precision :: x1, x2, v1, v2
-  double precision :: rsq, fac 
+  double precision :: rsq, fac
 
   do
 
@@ -118,12 +118,12 @@ end subroutine random_gaussian
 !     ENDIF
 ! !     WHERE(u1>=1.d0)  u1 = 1.d0-2**(-dim_num)
 ! !     WHERE(u1<=-1.d0) u1 = -1.d0+2**(-dim_num)
-    
+
 !     u1 = 2*u1-1.d0
 ! #if defined (__INTEL)
 !     ! Next call is inverse Erf, only available in mkl.
 !     CALL vderfinv(dim_num, u1, u2)
-! #else 
+! #else
 !     ! Or use homebrew inverse erf
 !     DO j = 1, dim_num
 !       u2(j) = dierfc2(u1(j))
@@ -138,16 +138,16 @@ end subroutine random_gaussian
 !   !
 ! end subroutine random_sobol
 ! !
-! ! This subroutine checks whether the number is a given 
+! ! This subroutine checks whether the number is a given
 ! ! array are formed according to a gaussian distribution.
-! ! As an output it gives the file 'test_gaussian' 
+! ! As an output it gives the file 'test_gaussian'
 ! ! where the data is compared to a gaussian distribution.
 
 subroutine check_gaussian(random)
 
   double precision, dimension(:), intent(in) :: random
 
-  integer :: i1, kg, i2 
+  integer :: i1, kg, i2
   double precision :: pi
 
   pi = 3.141592653589793238d0
@@ -156,10 +156,13 @@ subroutine check_gaussian(random)
 
   do i1 = 1, 100
     kg = 0
+    !      !$OMP PARALLEL DO DEFAULT (PRIVATE), SHARED(i1),&
+    !      !$OMP REDUCTION(+:kg)
     do i2 = 1, size(random)
-      if (random(i2) .ge. (-5 + (i1-1)*0.1) .and. & 
+      if (random(i2) .ge. (-5 + (i1-1)*0.1) .and. &
           random(i2) .lt. (-5 + i1*0.1) ) kg = kg + 1
     end do
+    !      !$OMP END PARALLEL DO
     write (unit=1,fmt=*) &
            -5.05d0 + dble(i1)*0.1d0, dble(kg) / dble(size(random)/10), &
             exp(-0.5d0*(-5.05d0 + dble(i1)*0.1d0)**2) / &
@@ -170,8 +173,8 @@ subroutine check_gaussian(random)
 
 end subroutine check_gaussian
 
-! This subroutine calculates the gaussian weight used for the  
-! correlated sampling 
+! This subroutine calculates the gaussian weight used for the
+! correlated sampling
 
 subroutine get_gaussian_weight(q,q_start,a,a_start,rho, n_config, n_modes)
 
@@ -196,14 +199,14 @@ subroutine get_gaussian_weight(q,q_start,a,a_start,rho, n_config, n_modes)
 
 end subroutine get_gaussian_weight
 
-! This subroutine calculates the gaussian weight used for the  
+! This subroutine calculates the gaussian weight used for the
 ! correlated sampling in case there are effective charges
 
 subroutine get_gaussian_weight_eff_charge(q,q_start,a,a_start,mu_relevant,rho)
 
   double precision, dimension(:,:), intent(in) :: q_start, q
   double precision, dimension(:,:), intent(in) :: a_start, a
-  logical, dimension(:), intent(in) :: mu_relevant 
+  logical, dimension(:), intent(in) :: mu_relevant
   double precision, dimension(:), intent(out) :: rho
 
   integer :: i, j, N, nmodes
@@ -229,8 +232,8 @@ end subroutine get_gaussian_weight_eff_charge
 !
 !     \sum_i f(i) p(i) / \sum_i p(i)
 !
-! where f(i) is the function to average and p(i) is the 
-! weight. The error is calculated using the formula for 
+! where f(i) is the function to average and p(i) is the
+! weight. The error is calculated using the formula for
 ! the propagation of errors.
 !
 
@@ -260,10 +263,10 @@ subroutine average_error_weight(f,rho,log_err,av_f,error_f)
 
   av_f1   = sum(rhof(:)) / dble(nc)
   av_rho  = sum(rho(:))  / dble(nc)
-  
+
   s_f     = sum((rhof(:)-av_f1)**2) / dble(nc-1)
   s_rho   = sum((rho(:)-av_rho)**2) / dble(nc-1)
-  s_f_rho = sum((rhof(:)-av_f1)*(rho(:)-av_rho)) / dble(nc-1)      
+  s_f_rho = sum((rhof(:)-av_f1)*(rho(:)-av_rho)) / dble(nc-1)
 
   ! Calculate the average and the error
 
@@ -277,16 +280,16 @@ subroutine average_error_weight(f,rho,log_err,av_f,error_f)
     error_f = (1.0d0/dsqrt(dble(nc))) * dsqrt( s_f )
  else
     stop "ERROR; log_err ill defined."
-  end if 
+  end if
 
   deallocate(rhof)
 
 end subroutine average_error_weight
 
 ! This subroutine gives a random number distributed
-! on a sphere of radious 1. 
-! It has been more or less copied from 
-! http://mathworld.wolfram.com/SpherePointPicking.html 
+! on a sphere of radious 1.
+! It has been more or less copied from
+! http://mathworld.wolfram.com/SpherePointPicking.html
 
 subroutine random_sphere(v_rand)
 
@@ -295,14 +298,14 @@ subroutine random_sphere(v_rand)
   double precision :: v1, v2, u, theta
   double precision :: twopi
 
-  twopi  = 6.2831853071795862d0 
+  twopi  = 6.2831853071795862d0
 
   call random_number(v1)
   call random_number(v2)
 
   u     = 2.0 * v1 - 1.0d0
   theta = v2 * twopi
- 
+
   v_rand(1) = dsqrt(1.0 - u**2) * cos(theta)
   v_rand(2) = dsqrt(1.0 - u**2) * sin(theta)
   v_rand(3) = u
