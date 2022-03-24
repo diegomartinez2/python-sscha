@@ -96,6 +96,7 @@ subroutine get_v3 ( a, er, transmode, amass, ityp_sc, f, u, rho, log_err, v3, &
 
     do x = 1, n_mode
       ur(:,x) = 0.0d0
+! Unless n_mode**2 is bigger than 1000000 making this parallel is useless (maybe adding a if condition at the beginning)      
 !      !$OMP PARALLEL DO DEFAULT (PRIVATE), SHARED(x),&
 !      !$OMP REDUCTION(+:ur)
       do mu = 1, n_mode
