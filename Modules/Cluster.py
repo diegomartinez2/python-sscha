@@ -826,7 +826,7 @@ Error while connecting to the cluster to copy the files:
 
     def batch_submission(self, list_of_structures, calc, indices,
                          in_extension, out_extension,
-                         label = "ESP", n_togheder=1):
+                         label = , n_togheder=1):
         """
         BATCH SUBMISSION
         ================
