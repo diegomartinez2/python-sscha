@@ -319,7 +319,7 @@ class Cluster(object):
         
         
         
-    def ExecuteCMD(self, cmd, raise_error = True, return_output = False, on_cluster = False):
+    def ExecuteCMD(self, cmd, raise_error = False, return_output = False, on_cluster = False):
         """
         EXECUTE THE CMD ON THE CLUSTER
         ==============================
@@ -797,7 +797,7 @@ Error while connecting to the cluster to copy the files:
         #cmd = self.sshcmd + " %s '%s %s/%s.sh'" % (self.hostname, self.submit_command, 
         #                                           self.workdir, label+ "_" + str(indices[0]))
        
-        return self.ExecuteCMD(cmd, True, return_output=True)
+        return self.ExecuteCMD(cmd, False, return_output=True)
 
     def get_output_path(self, label):
         """
@@ -994,9 +994,18 @@ Error while connecting to the cluster to copy the files:
 
         status, output = self.ExecuteCMD("squeue -u $USER", False, return_output = True, on_cluster = True, )
         lines = output.split("\n")
+
         if len(lines):
             for l in lines:
-                data = l.strip().split()
+                l = l.strip()
+                if not l:
+                    if verbose:
+                        now = datetime.datetime.now()
+                        sys.stderr.write("{}/{}/{} - {}:{}:{} | job {}: No response from the server \n".format(now.year, now.month, now.day, now.hour, now.minute, now.second, job_id))
+                        sys.stderr.flush()
+                    return False
+                    
+                data = l.split()
                 if len(data) == 0:
                     if verbose:
                         now = datetime.datetime.now()
@@ -1367,7 +1376,7 @@ Error while connecting to the cluster to copy the files:
         sshcmd = self.sshcmd + " %s 'mkdir -p %s'" % (self.hostname, 
                                                       workdir)
         
-        self.ExecuteCMD(sshcmd)
+        self.ExecuteCMD(sshcmd, raise_error= True)
 #        
 #        retval = os.system(sshcmd)
 #        if retval != 0:
@@ -1415,7 +1424,7 @@ Error while connecting to the cluster to copy the files:
 
         #print(cmd)
         
-        status, output = self.ExecuteCMD(cmd, return_output = True)
+        status, output = self.ExecuteCMD(cmd, return_output = True, raise_error= True)
 #        
 #        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
 #        output, err = p.communicate()
@@ -1442,7 +1451,7 @@ Error while connecting to the cluster to copy the files:
         
         # Setup if the ensemble has the stress
         ensemble.has_stress = get_stress
-        ensemble.all_properties = [None] * ensemble.N
+        #ensemble.all_properties = [None] * ensemble.N
         
         # Check if the working directory exists
         if not os.path.isdir(self.local_workdir):
@@ -1501,7 +1510,8 @@ Error in thread {}.
                 if not is_success:
                     continue
                 
-                ensemble.all_properties[num] = copy.deepcopy(res)
+                res_only_extra = {x : res[x] for x in res if x not in ["energy", "forces", "stress", "structure"]}
+                ensemble.all_properties[num].update(res_only_extra)
                 ensemble.energies[num] = res["energy"] / units["Ry"]
                 ensemble.forces[num, :, :] = res["forces"] / units["Ry"]
                 if get_stress:
@@ -1561,6 +1571,8 @@ Error in thread {}.
                 print ("Expected batch ordinary resubmissions:", num_batch_offset)
                 raise ValueError("Error, resubmissions exceeded the maximum number of %d" % self.max_recalc)
                 break
+        
+        print("CALCULATION ENDED: all properties: {}".format(ensemble.all_properties))
             
             
     
@@ -1576,10 +1588,11 @@ Error in thread {}.
         """
         
         # Check if the compute_ensemble batch must be done
-        if self.job_number != 1:
-            self.compute_ensemble_batch(ensemble, ase_calc, get_stress, timeout)
-            return
+        #if self.job_number != 1:
+        self.compute_ensemble_batch(ensemble, ase_calc, get_stress, timeout)
+        return
         
+        """
         # Track the remaining configurations
         success = [False] * ensemble.N
         
@@ -1648,4 +1661,5 @@ Error in thread {}.
                 print ("Expected batch ordinary resubmissions:", num_batch_offset)
                 raise ValueError("Error, resubmissions exceeded the maximum number of %d" % self.max_recalc)
                 break
+        """
             
