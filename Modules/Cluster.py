@@ -243,7 +243,7 @@ class Cluster(object):
 
         # This is the default label, change it if you are going to submit
         # two different calculations in the same working directory
-        self.label = "ESP_"
+        self.label = "ESP"
 
         # This is the maximum number of resubmissions after the expected one
         # from the batch size. It can be use to resubmit the failed jobs.
@@ -826,7 +826,7 @@ Error while connecting to the cluster to copy the files:
 
     def batch_submission(self, list_of_structures, calc, indices,
                          in_extension, out_extension,
-                         label = , n_togheder=1):
+                         label = self.label, n_togheder=1):
         """
         BATCH SUBMISSION
         ================
@@ -1030,7 +1030,7 @@ Error while connecting to the cluster to copy the files:
         return False
 
 
-    def run_atoms(self, ase_calc, ase_atoms, label="ESP",
+    def run_atoms(self, ase_calc, ase_atoms, label=self.label,
                   in_extension = ".pwi", out_extension=".pwo",
                   n_nodes = 1, n_cpu=1, npool=1):
         """
@@ -1463,7 +1463,7 @@ Error while connecting to the cluster to copy the files:
             structures = [ensemble.structures[i].copy() for i in jobs_id]
             n_together = min(len(structures), self.n_together_def)
             subs, indices, labels = self.batch_submission(structures, calc, jobs_id, ".pwi",
-                                            ".pwo", "ESP", n_together)
+                                            ".pwo", self.label, n_together)
 
             # Thread safe operation
             self.lock.acquire()
