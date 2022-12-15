@@ -199,7 +199,8 @@ class Cluster(object):
         self.terminal="/bin/bash"
         self.v_nodes="-N "
         self.use_nodes = True
-        self.v_cpu="-n "
+        #self.v_cpu="-n "
+        self.v_cpu="--cpus-per-task="  #Diegom_test
         self.use_cpu = True
         self.v_account="-A "
         self.use_account = True
