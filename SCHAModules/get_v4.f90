@@ -91,7 +91,7 @@ subroutine get_v4 ( a, er, transmode, amass, ityp_sc, f, u, rho, log_err, v4, &
     end do
 
     ! Rotate displacementes
-  !$OMP PARALLEL DO PRIVATE(mu, y, temp)
+  !$OMP PARALLEL DO SHARED ( ur, u2, e, n_mode ) PRIVATE(mu, y, temp)
     do x = 1, n_mode
       ur(:,x) = 0.0d0
       do mu = 1, n_mode
