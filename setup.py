@@ -4,8 +4,8 @@ from numpy.distutils.core import setup, Extension
 import os, sys 
 import numpy 
 
-extra_flags_c = ["-fopenmp"]
-extra_link_args_c = ["-fopenmp"]
+extra_flags_c = []
+extra_link_args_c = []
 mpi_compile_args = []
 mpi_link_args = []
 
@@ -89,12 +89,14 @@ SCHAModules = Extension(name = "SCHAModules",
 
 # Prepare the compilation of the Python Conde
 setup( name = "python-sscha",
-       version = "1.3.1",
+       version = "1.4.0",
        description = "Python implementation of the sscha code",
        author = "Lorenzo Monacelli",
        url = "https://github.com/mesonepigreco/python-sscha",
        packages = ["sscha"],
        package_dir = {"sscha": "Modules"},
+       include_package_data = True,
+       package_data={"": ["*.jl"]},
        setup_requires = ["numpy", "ase", "scipy", "cellconstructor", "spglib", "matplotlib"],
        ext_modules = [SCHAModules], # odd_HP
        scripts = ["scripts/sscha", "scripts/cluster_check.x", "scripts/plot_frequencies.py",
