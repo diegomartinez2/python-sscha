@@ -2151,8 +2151,8 @@ DETAILS OF ERROR:
         value2 = 0
 
         e_energy = np.zeros( self.N, dtype = np.float64)
-        if (len(self.energies)!=self.N): #check if energies changed length
-            print("Error in len(self.energies): len(self.energies)={},self.N={}").format(len(self.energies),self.N)
+        # if (len(self.energies)!=self.N): #check if energies changed length
+        #     print("Error in len(self.energies): len(self.energies)={},self.N={}").format(len(self.energies),self.N)
         e_energy[:] = self.energies[:]
         if subtract_sscha:
             e_energy -= self.sscha_energies[:]
