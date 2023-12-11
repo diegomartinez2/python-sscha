@@ -105,7 +105,7 @@ subroutine get_v4 ( a, er, transmode, amass, ityp_sc, f, u, rho, log_err, v4, &
 !!!        ur(:,x) = ur(:,x) + temp
       end do
     end do
-  !$OMP END PARALLEL DO
+!!!  !$OMP END PARALLEL DO
 
     ! Calculate the third order coefficients
 
