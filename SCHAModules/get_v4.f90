@@ -28,7 +28,7 @@ subroutine get_v4 ( a, er, transmode, amass, ityp_sc, f, u, rho, log_err, v4, &
 
     double precision, dimension(:,:), allocatable :: e
     double precision, dimension(:), allocatable :: fun
-    double precision, dimension(:,:), allocatable :: ur, u2, f2, temp
+    double precision, dimension(:,:), allocatable :: ur, u2, f2
     double precision :: av, av_err
 
     integer :: i, j, mu, nu, alpha, beta
@@ -91,21 +91,14 @@ subroutine get_v4 ( a, er, transmode, amass, ityp_sc, f, u, rho, log_err, v4, &
     end do
 
     ! Rotate displacementes
-!!!  !$OMP PARALLEL DO SHARED ( ur, u2, e, n_mode ) PRIVATE(mu, y, temp)
     do x = 1, n_mode
       ur(:,x) = 0.0d0
       do mu = 1, n_mode
-!!!        temp = 0.0d0
-!!!        !$OMP DO REDUCTION(+:temp)
         do y = 1, n_mode
-!!!          temp = temp + u2(:,y)*e(mu,x)*e(mu,y)
           ur(:,x) = ur(:,x) + u2(:,y)*e(mu,x)*e(mu,y)
         end do
-!!!        !$OMP END DO
-!!!        ur(:,x) = ur(:,x) + temp
       end do
     end do
-!!!  !$OMP END PARALLEL DO
 
     ! Calculate the third order coefficients
 
