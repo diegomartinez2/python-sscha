@@ -91,6 +91,7 @@ subroutine get_v4 ( a, er, transmode, amass, ityp_sc, f, u, rho, log_err, v4, &
     end do
 
     ! Rotate displacementes
+    !$OMP PARALLEL DO PRIVATE(x, mu, y) SHARED(ur, u2, e, n_mode)
     do x = 1, n_mode
       ur(:,x) = 0.0d0
       do mu = 1, n_mode
@@ -99,6 +100,7 @@ subroutine get_v4 ( a, er, transmode, amass, ityp_sc, f, u, rho, log_err, v4, &
         end do
       end do
     end do
+    !$OMP END PARALLEL DO
 
     ! Calculate the third order coefficients
 
