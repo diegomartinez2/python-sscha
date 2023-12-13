@@ -53,11 +53,11 @@ class SSCHA(object):
     def __init__(
         self,
         minimizer = None,
-        ase_calculator=None, 
+        ase_calculator=None,
         aiida_inputs: dict | None = None,
-        N_configs=1, 
+        N_configs=1,
         max_pop = 20,
-        save_ensemble = False, 
+        save_ensemble = False,
         cluster = None,
         **kwargs
     ):
@@ -74,7 +74,7 @@ class SSCHA(object):
                 An initialized ASE calculator. This will be used to compute energies and forces
                 for the relaxation of the SSCHA.
             aiida_input: dict
-                Dictionary containing the input data for the 
+                Dictionary containing the input data for the
                 :class:`~sscha.aiida_ensemble.AiiDAEnsemble.compute_ensmble`
                 method; namely:
                     * pw_code: str,
@@ -234,7 +234,6 @@ class SSCHA(object):
         if __RELAX_FIXVOLUME__ in keys:
             self.fix_volume = bool(c_info[__RELAX_FIXVOLUME__])
 
-# ****Diegom_test****
         if __RELAX_SOBOL__ in keys:
             self.sobol_sampling = bool(c_info[__RELAX_SOBOL__])
 
@@ -605,7 +604,7 @@ Error, the specified location to save the ensemble:
                         self.calc, True, stress_numerical, cluster = self.cluster)
                 #self.minim.ensemble.get_energy_forces(self.calc, True, stress_numerical = stress_numerical)
 
-                
+
                 if ensemble_loc is not None and self.save_ensemble:
                     self.minim.ensemble.save_bin(ensemble_loc, pop)
 
@@ -617,7 +616,7 @@ Error, the specified location to save the ensemble:
             self.minim.run(custom_function_pre = self.__cfpre__,
                            custom_function_post = self.__cfpost__,
                            custom_function_gradient = self.__cfg__)
-            
+
 
 
             self.minim.finalize()
