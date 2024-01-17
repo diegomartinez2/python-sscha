@@ -350,7 +350,7 @@ class SSCHA_Minimizer(object):
                     if timer is not None:
                         dyn_grad, err = timer.execute_timed_function(self.ensemble.get_fourier_gradient)
                     else:
-                        dyn_grad, err = self.ensemble.get_fourier_gradiennt()
+                        dyn_grad, err = self.ensemble.get_fourier_gradient()
                 else:
                     if timer is not None:
                         dyn_grad, err = timer.execute_timed_function(self.ensemble.get_preconditioned_gradient_parallel, True, True, preconditioned=1)
@@ -400,10 +400,10 @@ class SSCHA_Minimizer(object):
                         super_structure = self.dyn.structure.generate_supercell(supercell)
                         if timer is not None:
                             fc_supercell = timer_prepare.execute_timed_function(
-                                    CC.Phonons.GetSupercellFCFromDyn, 
-                                    dyn_grad, 
+                                    CC.Phonons.GetSupercellFCFromDyn,
+                                    dyn_grad,
                                     np.array(self.dyn.q_tot),
-                                    self.dyn.structure, 
+                                    self.dyn.structure,
                                     super_structure)
                         else:
                             fc_supercell = CC.Phonons.GetSupercellFCFromDyn(dyn_grad, np.array(self.dyn.q_tot), \
