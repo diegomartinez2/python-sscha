@@ -1732,7 +1732,8 @@ Error, the following stress files are missing from the ensemble:
         w = np.array(w/2, dtype = np.float64)
 
         # Get the a_0
-        old_a = SCHAModules.thermodynamic.w_to_a(w, self.T0)
+        #old_a = SCHAModules.thermodynamic.w_to_a(w, self.T0)
+        old_a = Thermodynamic.w_to_a(w, self.T0)
 
         # Now do the same for the new dynamical matrix
         #new_super_dyn = new_dynamical_matrix.GenerateSupercellDyn(self.supercell)
@@ -1770,8 +1771,8 @@ DETAILS OF ERROR:
 
         w= w_new[~trans_mask]
         w = np.array(w/2, dtype = np.float64)
-        new_a = SCHAModules.thermodynamic.w_to_a(w, newT)
-
+        #new_a = SCHAModules.thermodynamic.w_to_a(w, newT)
+        new_a = Thermodynamic.w_to_a(w, newT)
 
         # Get the new displacements in the supercell
         t3 = time.time()
@@ -1954,7 +1955,8 @@ DETAILS OF ERROR:
         w = np.array(w/2, dtype = np.float64)
 
         # Get the a_0
-        old_a = SCHAModules.thermodynamic.w_to_a(w, self.T0)
+        #old_a = SCHAModules.thermodynamic.w_to_a(w, self.T0)
+        old_a = Thermodynamic.w_to_a(w, self.T0)
 
         # Now do the same for the new dynamical matrix
         #new_super_dyn = new_dynamical_matrix.GenerateSupercellDyn(self.supercell)
@@ -1992,8 +1994,8 @@ DETAILS OF ERROR:
 
         w= w_new[~trans_mask]
         w = np.array(w/2, dtype = np.float64)
-        new_a = SCHAModules.thermodynamic.w_to_a(w, newT)
-
+        #new_a = SCHAModules.thermodynamic.w_to_a(w, newT)
+        new_a = Thermodynamic.w_to_a(w, newT)
 
         # Get the new displacements in the supercell
         t2 = time.time()
@@ -3656,8 +3658,8 @@ Error while loading the julia module.
         else:
             w, pols = w_pols
 
-        a = SCHAModules.thermodynamic.w_to_a(w, self.current_T)
-
+        #a = SCHAModules.thermodynamic.w_to_a(w, self.current_T)
+        a = Thermodynamic.w_to_a(w, self.current_T)
 
         n_modes = len(w)
         nat_sc = int(np.shape(pols)[0] / 3)
