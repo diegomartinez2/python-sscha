@@ -14,7 +14,7 @@ contains
     integer, intent(in) :: n
 
     a = 0.0d0
-    if (T .eq. 0.0D0) then
+    if (T .eq. 0.0d0) then
        a(:) = dsqrt(1.0d0 / (2.0d0 * w(:)))
     else
        a(:) = dsqrt((1.0d0 / dtanH(0.5d0 * w * &
@@ -39,7 +39,7 @@ contains
     double precision :: beta
 
 
-    if (T .eq. 0.0D0) then
+    if (T .eq. 0.0d0) then
        da = - dsqrt(1.0d0 / (8.0d0 *  w**3.0d0))
     else
        !    result_w_to_da = - dsqrt((1.0d0 / dtanH(0.5d0 * w * &
