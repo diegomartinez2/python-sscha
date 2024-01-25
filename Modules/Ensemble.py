@@ -41,6 +41,7 @@ import json
 import difflib
 
 import SCHAModules
+import sscha.Thermodynamic as Thermodynamic
 #import sscha_HP_odd
 
 _SSCHA_ODD_ = False
