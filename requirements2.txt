@@ -1,5 +1,5 @@
-setuptools
-numpy
-scipy
+setuptools==68.2.2
+numpy==1.24.3
+scipy==1.10.0
 ase==3.16.0
 spglib<=2.2
