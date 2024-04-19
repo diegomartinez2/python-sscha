@@ -588,7 +588,7 @@ Error, the supercell does not match with the q grid of the dynamical matrix.
         self.all_properties = [None] * self.N
 
         # Add a counter to check if all the stress tensors are present
-        count_stress = 0
+        #count_stress = 0   #this count_stress is not used in this function
 
         # Superstructure
         #dyn_supercell = self.dyn_0.GenerateSupercellDyn(self.supercell)
@@ -597,8 +597,8 @@ Error, the supercell does not match with the q grid of the dynamical matrix.
 
         self.structures = []
 
-        total_t_for_loading = 0
-        total_t_for_sscha_ef = 0
+        #total_t_for_loading = 0  #not used
+        #total_t_for_sscha_ef = 0
         t_before_for = time.time()
         for i in range(self.N):
             # Load the structure
@@ -1645,7 +1645,7 @@ Error, the following stress files are missing from the ensemble:
         else:
             super_structure = self.supercell_structure.copy()
 
-        Nat_sc = super_structure.N_atoms
+        #Nat_sc = super_structure.N_atoms
 
         #self.u_disps[:,:] = self.xats.reshape((self.N, 3*Nat_sc)) - np.tile(super_structure.coords.ravel(), (self.N,1))
         #old_disps[:,:] = self.xats.reshape((self.N, 3*Nat_sc)) - np.tile(super_struct0.coords.ravel(), (self.N,1))
@@ -1656,7 +1656,7 @@ Error, the following stress files are missing from the ensemble:
         self.update_displacements(new_dynamical_matrix.structure)
 
         # Get the lattice vectors
-        nat_sc = super_structure.N_atoms
+        #nat_sc = super_structure.N_atoms
 
 
         # Get the displacements according to Fourier
@@ -2157,7 +2157,7 @@ DETAILS OF ERROR:
         """
 
         value = 0
-        value2 = 0
+        #value2 = 0
 
         e_energy = np.zeros( self.N, dtype = np.float64)
         # if (len(self.energies)!=self.N): #check if energies changed length
@@ -2504,7 +2504,7 @@ Error while loading the julia module.
 
         nq = len(self.current_dyn.q_tot)
         nat = self.current_dyn.structure.N_atoms
-        nat_sc = self.structures[0].N_atoms
+        #nat_sc = self.structures[0].N_atoms
 
         Y_qspace = julia.Main.get_upsilon_fourier(
             self.w_q_current,
@@ -3936,7 +3936,7 @@ Error while loading the julia module.
 
         structs = [self.structures[x] for x in np.arange(len(split_mask))[split_mask]]
 
-        N = np.sum(split_mask.astype(int))
+        #N = np.sum(split_mask.astype(int))
         ens = Ensemble(self.dyn_0, self.T0, self.dyn_0.GetSupercell())
         ens.init_from_structures(structs)
 
