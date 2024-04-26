@@ -4203,7 +4203,7 @@ Error while loading the julia module.
         n = len(w)
         a = np.zeros(n)
         if T == 0.0:
-            a[:] = np.sqrt(1.0 / (2.0 * w))
+            a[:] = np.sqrt(1.0 / (2.0 * np.abs(w)))
         else:
             a[:] = np.sqrt((1.0 / np.tanh(0.5 * w * 315774.65221921849 / T)) / (2.0 * w))
         return a
