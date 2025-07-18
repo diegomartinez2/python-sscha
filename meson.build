@@ -143,7 +143,7 @@ endforeach
 # Create a 'sscha' subdirectory within the Python installation directory
 # and copy the .jl files there.
 install_data(
-  ['Modules/some_file.jl'], # List the .jl files you need
+  ['Modules/fourier_gradient.jl'], # List the .jl files you need 
   install_dir : python.get_install_dir() / 'sscha'
 )
 # If there are many .jl files in multiple subdirectories,
