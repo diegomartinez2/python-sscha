@@ -19,7 +19,7 @@ jobs:
         # Define las versiones de Python en las que se probará el proyecto.
         # He expandido la lista para cubrir versiones más modernas,
         # ajusta según las versiones que tu proyecto realmente soporte.
-        python-version: [3.8, 3.9, 3.10, 3.11, 3.12]
+        python-version: [3.8, 3.10, 3.12, 3.13]
 
     services:
       # Configuración del servicio RabbitMQ, si tus tests de AiiDA lo requieren.
