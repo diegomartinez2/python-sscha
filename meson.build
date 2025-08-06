@@ -1,9 +1,19 @@
-project('python-sscha', 'python', 'fortran', 'c',
+project('python-sscha', 'fortran', 'c',
   version : '1.4.2',
-  default_options : ['warning_level=1'])
+  license: 'GPL',
+# Common compilation options for Fortran.
+# -cpp is essential for the Fortran preprocessor.
+# -O2 is a general optimization you had in setup.py.
+  default_options : ['warning_level=1','fortran_args=-cpp', 'fortran_args=-O2'])
 
-python = import('python')
-py_dep = python.dependency() # Esto maneja las cabeceras y libs de Python
+  # --- System and Python Dependencies ---
+  # Imports the Meson Python module to handle extensions and Python installation.
+  python = import('python')
+  python_installation = python.find_installation()
+  numpy_incdir = run_command(
+    python_installation, '-c', 'import numpy; print(numpy.get_include())',
+    check: true
+  ).stdout().strip()
 
 # --- BLAS/LAPACK Dependencies ---
 # Meson will attempt to automatically detect LAPACK and BLAS.
@@ -13,6 +23,8 @@ py_dep = python.dependency() # Esto maneja las cabeceras y libs de Python
 lapack_dep = dependency('lapack', required : true)
 blas_dep = dependency('blas', required : true)
 
+# Look for the OpenMP library if it is needed for parallelization.
+openmp_dep = dependency('openmp', required: true)
 
 # --- MPI Detection ---
 # This overrides the logic in os.environ["MPICC"] and os.popen("%s -show" % mpicc).
@@ -93,6 +105,7 @@ py_mod_schamodules = python.extension_module(
   # Add -fPIC for Linux if needed (Meson usually handles this)
   # This is the equivalent of extra_f90_compile_args and extra_link_args
   # in setup.py for the Fortran module.
+  include_directories: include_directories(numpy_incdir),
 )
 
 # --- Module odd_HP (C) ---
@@ -143,7 +156,7 @@ endforeach
 # Create a 'sscha' subdirectory within the Python installation directory
 # and copy the .jl files there.
 install_data(
-  ['Modules/fourier_gradient.jl'], # List the .jl files you need 
+  ['Modules/fourier_gradient.jl'], # List the .jl files you need
   install_dir : python.get_install_dir() / 'sscha'
 )
 # If there are many .jl files in multiple subdirectories,
