@@ -207,7 +207,8 @@ py.install_sources([
   'Modules/Relax.py',
   'Modules/SchaMinimizer.py',
   'Modules/Tools.py',
-  'Modules/Utilities.py'
+  'Modules/Utilities.py',
+  'Modules/cli.py'
   ],
   subdir: 'sscha',
 )

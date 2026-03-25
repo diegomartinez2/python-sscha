@@ -23,6 +23,10 @@ dependencies = [
 # entries = { scripts = ["scripts/sscha", "scripts/cluster_check.x", ...] }
 # However, Meson is better at handling scripts like install_data
 
+[project.scripts]
+sscha-plot-data="sscha.cli:plot_data"
+sscha="sscha.cli:main"
+
 [project.urls]
 Homepage = "https://sscha.eu/"
 Repository = "https://github.com/SSCHAcode/python-sscha"
