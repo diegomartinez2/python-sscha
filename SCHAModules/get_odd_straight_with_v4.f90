@@ -20,7 +20,7 @@ subroutine get_odd_straight_with_v4 ( a, wr, er, transmode, amass, ityp_sc, T, v
 
 
   integer :: nat_sc, n_mode, nl, ns, ntyp
-  double precision, dimension(:,:), allocatable :: l, g, phi_aux, v1, v2, v32, iden
+  double precision, dimension(:,:), allocatable :: l, g, phi_aux, v1, v2, v32
   double precision :: lsum 
   double precision, dimension(:), allocatable :: laux1, lres1, veclong
   double precision, dimension(:), allocatable :: laux2, lres2
@@ -30,9 +30,6 @@ subroutine get_odd_straight_with_v4 ( a, wr, er, transmode, amass, ityp_sc, T, v
   integer, dimension(:), allocatable :: ipiv
   integer :: info
 
-  double precision, dimension(:), allocatable :: vv
-  double precision, dimension(:), allocatable :: ww
-  double precision, dimension(:,:), allocatable :: zz
   double precision, dimension(:,:), allocatable :: cf
 
   integer :: mu, nu, alpha
@@ -67,15 +64,10 @@ subroutine get_odd_straight_with_v4 ( a, wr, er, transmode, amass, ityp_sc, T, v
   allocate(ipiv(nl))
   allocate(work(nl))
   allocate(v32(n_mode,n_mode*n_mode))
-  allocate(iden(nl,nl))
 
   allocate(cf(nl,ns))
 
-  allocate(vv(nl*(nl+1)/2))
-  allocate(ww(nl))
-  allocate(zz(nl,nl))
-
-  ! Get lambda matrix 
+  ! Get lambda matrix
 
   call get_cmat ( a, wr, er, transmode, amass, ityp_sc, T, .true., lamat,n_mode, nat_sc, ntyp )
   
@@ -100,20 +92,19 @@ subroutine get_odd_straight_with_v4 ( a, wr, er, transmode, amass, ityp_sc, T, v
     end do
   end do
 
-  ! Prepare identity matrix
+  ! Prepare identity matrix directly in maux (was: iden then maux = iden;
+  ! bitwise identical, avoids one nl x nl temporary)
 
-  iden = 0.0d0
+  maux = 0.0d0
 
   do x = 1, nl
-    iden(x,x) = 1.0d0
+    maux(x,x) = 1.0d0
   end do
 
   ! Calculate ** iden - v4 lamat ** matrix
 
   !print *, "BEFORE I - V4Lambda"
   !call flush()
-
-  maux = iden
 
   call dgemm('N','N',nl,nl,nl,-1.0d0,v42,nl,lamat,nl,1.0d0,maux,nl) 
 
