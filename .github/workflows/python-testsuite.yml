@@ -56,6 +56,10 @@ jobs:
         cd CellConstructor
         pip install --no-build-isolation .
         cd ..
+        git clone --depth 1 https://github.com/mir-group/flare.git flare
+        cd flare
+        pip install .
+        cd ..
 
         pip install --no-build-isolation .
 
