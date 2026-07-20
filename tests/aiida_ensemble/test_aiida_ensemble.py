@@ -80,17 +80,25 @@ def test_get_running_workchains(generate_workchain_pw_node):
 @pytest.mark.usefixtures('aiida_profile')
 def test_submit_and_get_workchains(fixture_code):
     """Test the :func:`sscha.aiida_ensemble.submit_and_get_workchains` method."""
+    from ase.build import bulk
     from cellconstructor.Structure import Structure
     from sscha.aiida_ensemble import submit_and_get_workchains
 
     pw_code = fixture_code('quantumespresso.pw')
-    structures = [Structure(nat=1) for _ in range(5)]
+    
+    structures = []
+    for _ in range(5):
+        atoms = bulk('Si', cubic=True)
+        structure = Structure()
+        structure.generate_from_ase_atoms(atoms)
+        structures.append(structure)
 
     workchains = submit_and_get_workchains(
         structures=structures,
         pw_code=pw_code,
         temperature=300,
         dft_indices=[0,1,2,3,4],
+        waiting_time=0.01,
     )
 
     assert len(workchains) == 5
