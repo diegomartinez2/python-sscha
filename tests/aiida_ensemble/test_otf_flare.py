@@ -84,7 +84,7 @@ def test_set_otf(generate_ensemble):
     ensemble.set_otf(flare_calc, max_atoms_added=-1)
     
     assert ensemble.gp_model is not None
-    assert ensemble.train_hyps == (100,120)
+    assert ensemble.train_hyps == (1, np.inf)
 
 
 def test_compute_properties(generate_ensemble):
