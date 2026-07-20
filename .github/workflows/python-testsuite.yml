@@ -51,11 +51,14 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install git gfortran libblas-dev liblapack-dev
-        pip install mir-flare
         git clone https://github.com/SSCHAcode/CellConstructor.git
         pip install meson meson-python ninja
         cd CellConstructor
         pip install --no-build-isolation .
+        cd ..
+        git clone --depth 1 https://github.com/mir-group/flare.git flare
+        cd flare
+        pip install .
         cd ..
 
         pip install --no-build-isolation .
