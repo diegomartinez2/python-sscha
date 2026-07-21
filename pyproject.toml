@@ -23,11 +23,6 @@ dependencies = [
 # entries = { scripts = ["scripts/sscha", "scripts/cluster_check.x", ...] }
 # However, Meson is better at handling scripts like install_data
 
-[project.optional-dependencies]
-# Fast Julia-accelerated fourier gradients. juliacall installs the Julia
-# runtime automatically at first use, no further setup is required.
-julia = ["juliacall"]
-
 [project.scripts]
 sscha-plot-data="sscha.cli:plot_data"
 sscha="sscha.cli:main"
@@ -39,6 +34,9 @@ Repository = "https://github.com/SSCHAcode/python-sscha"
 Issues = "https://github.com/SSCHAcode/python-sscha/issues"
 
 [project.optional-dependencies]
+# Fast Julia-accelerated fourier gradients. juliacall installs the Julia
+# runtime automatically at first use, no further setup is required.
+julia = ["juliacall"]
 pre-commit = [
     'pre-commit~=2.17',
     'pylint==2.13.7',
